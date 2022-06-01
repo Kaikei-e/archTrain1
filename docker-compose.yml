@@ -1,0 +1,60 @@
+version: "3"
+
+services:
+  r-proxy:
+    image: nginx:alpine
+    networks:
+      app_net:
+        ipv4_address: 172.16.238.10
+
+  go:
+    container_name: goAPIserver
+    build: ./Go/
+    tty: true
+    environment:
+      TZ: "Asia/Tokyo"
+    volumes:
+      - ./Go/app/:/app
+    ports:
+      - "8000:8000"
+    networks:
+      app_net:
+        ipv4_address: 172.16.238.30
+
+
+  node:
+    build: ./node
+    container_name: node
+    tty: true
+    volumes:
+      - ./node/app/:/app
+    ports:
+      - "3000:3000"
+    networks:
+      app_net:
+        ipv4_address: 172.16.238.20
+
+
+  postgre:
+    container_name: postgre
+    build: ./DB/
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
+      - 3308:3306
+    networks:
+      app_net:
+        ipv4_address: 172.16.238.40
+    restart: always
+
+networks:
+  app_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.238.0/24
+
+volumes:
+  data:

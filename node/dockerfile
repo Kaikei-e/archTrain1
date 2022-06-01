@@ -1,0 +1,5 @@
+FROM node:18
+
+ADD ./app /app
+
+EXPOSE 3000

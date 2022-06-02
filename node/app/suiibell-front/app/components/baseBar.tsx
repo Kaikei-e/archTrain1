@@ -40,7 +40,7 @@ const LinkItems: Array<LinkItemProps> = [
   { name: 'Home', icon: FiHome, path: "" },
   { name: 'Trending', icon: FiTrendingUp, path: "trending" },
   { name: 'Logging', icon: FiEdit, path: "logging" },
-  { name: 'Settings', icon: FiSettings, path: "setting" },
+  { name: 'Settings', icon: FiSettings, path: "settings" },
 ];
 
 export default function BaseBar({ children }: { children: ReactNode }) {
@@ -48,8 +48,8 @@ export default function BaseBar({ children }: { children: ReactNode }) {
 
   return (
     <Box>
-      <Box h={"8vh"} minW={"100vw"} bgColor={"blue.100"}>
-        <Button ml={"10px"} mt={"15px"} bgColor="blue.100">
+      <Box h={"8vh"} minW={"100vw"} bgColor={"blue.200"}>
+        <Button ml={"10px"} mt={"15px"} bgColor="blue.200">
           <FiMenu onClick={onOpen} size={"sm"}>
           </FiMenu>
           <Text m={"10px"} fontFamily={"mono"} fontSize="3xl">SuiiBell</Text>
@@ -62,7 +62,7 @@ export default function BaseBar({ children }: { children: ReactNode }) {
           <DrawerOverlay />
           <DrawerContent>
             <DrawerCloseButton />
-            <DrawerBody bgColor={"blue.100"}>
+            <DrawerBody bgColor={"blue.200"}>
               <SidebarContent onClose={onClose}/>
             </DrawerBody>
 
@@ -82,9 +82,9 @@ interface SidebarProps extends BoxProps {
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   return (
     <Box
-      bg={useColorModeValue("blue.100", 'gray.900')}
+      bg={useColorModeValue("blue.200", 'gray.900')}
       borderRight="1px"
-      borderRightColor={useColorModeValue('gray.200', 'gray.700')}
+      borderRightColor={useColorModeValue('blue.200', 'gray.700')}
       w={{ base: 'full', md: 60 }}
       pos="fixed"
       h="full"

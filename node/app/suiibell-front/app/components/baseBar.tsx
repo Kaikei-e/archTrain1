@@ -12,15 +12,24 @@ import {
   useDisclosure,
   BoxProps,
   FlexProps,
+  Button,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  Input,
 } from '@chakra-ui/react';
 import {
   FiHome,
   FiTrendingUp,
   FiSettings,
-  FiEdit
+  FiEdit,
+  FiMenu
 } from 'react-icons/fi';
 import { IconType } from 'react-icons';
 import { ReactText } from 'react';
+import icon from '@chakra-ui/icon/dist/declarations/src/icon';
 
 interface LinkItemProps {
   name: string;
@@ -28,37 +37,41 @@ interface LinkItemProps {
   path: string;
 }
 const LinkItems: Array<LinkItemProps> = [
-  { name: 'Home', icon: FiHome, path: ""},
-  { name: 'Trending', icon: FiTrendingUp, path: "trending"},
+  { name: 'Home', icon: FiHome, path: "" },
+  { name: 'Trending', icon: FiTrendingUp, path: "trending" },
   { name: 'Logging', icon: FiEdit, path: "logging" },
   { name: 'Settings', icon: FiSettings, path: "setting" },
 ];
 
 export default function BaseBar({ children }: { children: ReactNode }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <Box>
-      <SidebarContent
-        onClose={() => onClose}
-        display={{ base: 'none', md: 'block' }}
-      />
-      <Drawer
-        autoFocus={false}
-        isOpen={isOpen}
-        placement="left"
-        onClose={onClose}
-        returnFocusOnClose={false}
-        onOverlayClick={onClose}
-        size="full">
-        <DrawerContent>
-          <SidebarContent onClose={onClose} />
-        </DrawerContent>
-      </Drawer>
-      
-      <Box ml={{ base: 0, md: 60 }} p="4">
-        {children}
+      <Box h={"8vh"} minW={"100vw"} bgColor={"gray.100"}>
+        <Button ml={"10px"} mt={"15px"}>
+          <FiMenu onClick={onOpen} size={"sm"}>
+          </FiMenu>
+          <Text m={"10px"} fontFamily={"mono"} fontSize="3xl">SuiiBell</Text>
+        </Button>
+        <Drawer
+          isOpen={isOpen}
+          placement="left"
+          onClose={onClose}
+        >
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerCloseButton />
+            <DrawerBody bgColor={"gray.100"}>
+              <SidebarContent onClose={onClose}/>
+            </DrawerBody>
+
+          </DrawerContent>
+        </Drawer>
+
       </Box>
     </Box>
+
   );
 }
 

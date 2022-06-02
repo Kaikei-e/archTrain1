@@ -4,9 +4,13 @@ import BaseBar from "~/components/baseBar"
 
 function Trending(params:any) {
   return (
-    <Box minW={"100vw"} minH={"100vh"}>
+    <Box minW={"100vw"} minH={"100vh"} >
       <BaseBar children={undefined}/>
-      <Heading>Trending: Analyze your balance</Heading>
+      <Box w={"100vw"} h={"92vh"} overflow={"auto"} bgColor="gray.100">
+      <Heading fontWeight={"light"}>Trending: Analyze your balance</Heading>
+
+      </Box>
+
     </Box>
   )
 }

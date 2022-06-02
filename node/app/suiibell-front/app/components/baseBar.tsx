@@ -48,8 +48,8 @@ export default function BaseBar({ children }: { children: ReactNode }) {
 
   return (
     <Box>
-      <Box h={"8vh"} minW={"100vw"} bgColor={"gray.100"}>
-        <Button ml={"10px"} mt={"15px"}>
+      <Box h={"8vh"} minW={"100vw"} bgColor={"blue.100"}>
+        <Button ml={"10px"} mt={"15px"} bgColor="blue.100">
           <FiMenu onClick={onOpen} size={"sm"}>
           </FiMenu>
           <Text m={"10px"} fontFamily={"mono"} fontSize="3xl">SuiiBell</Text>
@@ -62,7 +62,7 @@ export default function BaseBar({ children }: { children: ReactNode }) {
           <DrawerOverlay />
           <DrawerContent>
             <DrawerCloseButton />
-            <DrawerBody bgColor={"gray.100"}>
+            <DrawerBody bgColor={"blue.100"}>
               <SidebarContent onClose={onClose}/>
             </DrawerBody>
 
@@ -82,7 +82,7 @@ interface SidebarProps extends BoxProps {
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   return (
     <Box
-      bg={useColorModeValue("gray.100", 'gray.900')}
+      bg={useColorModeValue("blue.100", 'gray.900')}
       borderRight="1px"
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
       w={{ base: 'full', md: 60 }}
@@ -120,8 +120,8 @@ const NavItem = ({ icon, path, children, ...rest }: NavItemProps) => {
         role="group"
         cursor="pointer"
         _hover={{
-          bg: 'blue.200',
-          color: 'white',
+          bg: 'gray.100',
+          color: 'black',
         }}
         {...rest}>
         {icon && (
@@ -129,7 +129,7 @@ const NavItem = ({ icon, path, children, ...rest }: NavItemProps) => {
             mr="4"
             fontSize="16"
             _groupHover={{
-              color: 'white',
+              color: 'black',
             }}
             as={icon}
           />

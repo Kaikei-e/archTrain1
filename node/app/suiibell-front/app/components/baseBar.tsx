@@ -1,6 +1,5 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import {
-  IconButton,
   Box,
   CloseButton,
   Flex,
@@ -18,7 +17,6 @@ import {
   FiHome,
   FiTrendingUp,
   FiSettings,
-  FiMenu,
   FiEdit
 } from 'react-icons/fi';
 import { IconType } from 'react-icons';
@@ -71,7 +69,7 @@ interface SidebarProps extends BoxProps {
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   return (
     <Box
-      bg={useColorModeValue('white', 'gray.900')}
+      bg={useColorModeValue("gray.100", 'gray.900')}
       borderRight="1px"
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
       w={{ base: 'full', md: 60 }}
@@ -109,7 +107,7 @@ const NavItem = ({ icon, path, children, ...rest }: NavItemProps) => {
         role="group"
         cursor="pointer"
         _hover={{
-          bg: 'cyan.400',
+          bg: 'blue.200',
           color: 'white',
         }}
         {...rest}>

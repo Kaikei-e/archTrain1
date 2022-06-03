@@ -15,21 +15,22 @@ import {
   Button,
   DrawerBody,
   DrawerCloseButton,
-  DrawerFooter,
-  DrawerHeader,
   DrawerOverlay,
-  Input,
+  Spacer,
 } from '@chakra-ui/react';
 import {
   FiHome,
   FiTrendingUp,
   FiSettings,
   FiEdit,
-  FiMenu
+  FiMenu,
+  FiLogOut
 } from 'react-icons/fi';
 import { IconType } from 'react-icons';
 import { ReactText } from 'react';
-import icon from '@chakra-ui/icon/dist/declarations/src/icon';
+import { getUser, logout } from '~/services/session.server';
+import { json, LoaderFunction, redirect } from '@remix-run/node';
+import { Links, NavLink, useLoaderData } from '@remix-run/react';
 
 interface LinkItemProps {
   name: string;
@@ -43,17 +44,42 @@ const LinkItems: Array<LinkItemProps> = [
   { name: 'Settings', icon: FiSettings, path: "settings" },
 ];
 
+type LoaderData = {
+  user: Awaited<ReturnType<typeof getUser>>;
+};
+
+export const loader: LoaderFunction = async ({
+  request,
+}) => {
+  const user = await getUser(request);
+  const data: LoaderData = {
+    user
+  };
+  return json(data);
+};
+
 export default function BaseBar({ children }: { children: ReactNode }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const data = useLoaderData<LoaderData>();
 
   return (
     <Box>
-      <Box h={"8vh"} minW={"100vw"} bgColor={"blue.200"}>
-        <Button ml={"10px"} mt={"15px"} bgColor="blue.200">
-          <FiMenu onClick={onOpen} size={"sm"}>
-          </FiMenu>
-          <Text m={"10px"} fontFamily={"mono"} fontSize="3xl">SuiiBell</Text>
-        </Button>
+      <Box h={"6vh"} minW={"100vw"} bgColor={"blue.200"}>
+        <Flex bgColor="blue.200">
+          <Button ml={"10px"} mt={"5px"} bgColor="blue.200">
+            <FiMenu onClick={onOpen} size={"xs"} />
+            <Text m={"10px"} fontFamily={"mono"} fontWeight="light" fontSize="3xl">SuiiBell</Text>
+          </Button>
+          <Spacer />
+          {data.user ? (
+            <Button mr={"10px"} mt={"10px"} bgColor="blue.200" size={"sm"} >
+              <FiLogOut size={"xs"} />
+            </Button>
+          ) : (
+            redirect("/login")
+          )}
+
+        </Flex>
         <Drawer
           isOpen={isOpen}
           placement="left"
@@ -63,7 +89,7 @@ export default function BaseBar({ children }: { children: ReactNode }) {
           <DrawerContent>
             <DrawerCloseButton />
             <DrawerBody bgColor={"blue.200"}>
-              <SidebarContent onClose={onClose}/>
+              <SidebarContent onClose={onClose} />
             </DrawerBody>
 
           </DrawerContent>

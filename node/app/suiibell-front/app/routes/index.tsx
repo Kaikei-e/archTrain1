@@ -1,8 +1,10 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
 import BaseBar from "~/components/baseBar";
-import { Form, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import { ActionFunction, LoaderFunction } from "@remix-run/node"
 import authenticator from "~/services/auth.server";
+import { createUserSession } from "~/services/session.server";
+import login from "./login";
 
 export default function Index() {
   const data = useLoaderData();
@@ -27,5 +29,8 @@ export let loader: LoaderFunction = async ({ request }) => {
 };
 
 export const action: ActionFunction = async ({ request }) => {
+  const user = await login({ username, password });
+
   await authenticator.logout(request, { redirectTo: "/login" });
+  return createUserSession(user.id, redirectTo);
 };

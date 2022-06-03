@@ -15,9 +15,9 @@ authenticator.use(
 
     let user = null;
 
-    if (!email || email?.length === 0) throw new AuthorizationError('Bad Credentials: Email is required')
+    if (!email || email?.length === 0) throw new AuthorizationError('Bad Credentials: email is required')
     if (typeof email !== 'string')
-      throw new AuthorizationError('Bad Credentials: Email must be a string')
+      throw new AuthorizationError('Bad Credentials: user ID must be a string')
 
     if (!password || password?.length === 0) throw new AuthorizationError('Bad Credentials: Password is required')
     if (typeof password !== 'string')
@@ -25,7 +25,7 @@ authenticator.use(
 
     if (email === 'aaron@mail.com' && password === 'password') {
       user = {
-        name: email,
+        email: email,
         token: `${password}-${new Date().getTime()}`,
       };
 

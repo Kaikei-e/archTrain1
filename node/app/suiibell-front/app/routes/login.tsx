@@ -48,7 +48,7 @@ export default function LoginPage() {
         <Flex w={"20%"} style={{ fontFamily: "system-ui, mono", lineHeight: "1.4" }} flexDirection="column">
           <Flex m="5px">
             <Form method="post">
-              <Input type="email" name="email" placeholder="email" required mb={"5px"} color="white"
+              <Input type="userId" name="userId" placeholder="user id" required mb={"5px"} color="white"
                 _placeholder={{ opacity: 1, color: 'gray.100' }}
 
               />

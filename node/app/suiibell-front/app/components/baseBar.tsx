@@ -70,9 +70,8 @@ export default function BaseBar({ children }: { children: ReactNode }) {
           <Form method="post">
             <button>
               <Button mr={"10px"} mt={"10px"} bgColor="blue.200" size={"sm"}>
-                <FiLogOut size={"xs"} />
+                <FiLogOut />
               </Button>
-
             </button>
           </Form>
 

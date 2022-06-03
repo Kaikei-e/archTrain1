@@ -1,8 +1,35 @@
 import { Form, useLoaderData } from "@remix-run/react";
 import { Box, Button, Flex, Input, Spacer, Text } from "@chakra-ui/react";
+import { json, LoaderFunction, ActionFunction } from "@remix-run/node";
+import authenticator from "~/services/auth.server";
+import { sessionStorage } from "~/services/session.server";
+
+export const loader: LoaderFunction = async ({ request }) => {
+
+  await authenticator.isAuthenticated(request, {
+    successRedirect: "/"
+  });
+
+  const session = await sessionStorage.getSession(
+    request.headers.get("Cookie")
+  );
+
+  const error = session.get("sessionErrorKey");
+  return json<any>({ error });
+};
+
+export const action: ActionFunction = async ({ request, context }) => {
+  const resp = await authenticator.authenticate("form", request, {
+    successRedirect: "/",
+    failureRedirect: "/login",
+    throwOnError: true,
+    context,
+  });
+  console.log(resp);
+  return resp;
+};
 
 export default function LoginPage() {
-  // if i got an error it will come back with the loader data
   const loaderData = useLoaderData();
   console.log(loaderData);
   return (
@@ -34,12 +61,12 @@ export default function LoginPage() {
                 color="white"
                 _placeholder={{ opacity: 1, color: 'gray.100' }}
               />
-              <Button variant="outline" color="white">Sign In</Button>
+              <button><Button variant="outline" color="white">Sign In</Button></button>
             </Form>
           </Flex>
-          <div>
+          <Text bgColor={"white"}>
             {loaderData?.error ? <p>ERROR: {loaderData?.error?.message}</p> : null}
-          </div>
+          </Text>
         </Flex>
       </Box>
       <Spacer />

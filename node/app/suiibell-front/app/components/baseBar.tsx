@@ -28,9 +28,9 @@ import {
 } from 'react-icons/fi';
 import { IconType } from 'react-icons';
 import { ReactText } from 'react';
-import { getUser, logout } from '~/services/session.server';
-import { json, LoaderFunction, redirect } from '@remix-run/node';
-import { Links, NavLink, useLoaderData } from '@remix-run/react';
+import { ActionFunction, LoaderFunction, redirect } from '@remix-run/node';
+import authenticator from '~/services/auth.server';
+import { Form } from '@remix-run/react';
 
 interface LinkItemProps {
   name: string;
@@ -44,23 +44,19 @@ const LinkItems: Array<LinkItemProps> = [
   { name: 'Settings', icon: FiSettings, path: "settings" },
 ];
 
-type LoaderData = {
-  user: Awaited<ReturnType<typeof getUser>>;
+export let loader: LoaderFunction = async ({ request }) => {
+  return await authenticator.isAuthenticated(request, {
+    failureRedirect: "/login",
+  });
 };
 
-export const loader: LoaderFunction = async ({
-  request,
-}) => {
-  const user = await getUser(request);
-  const data: LoaderData = {
-    user
-  };
-  return json(data);
+export const action: ActionFunction = async ({ request }) => {
+  await authenticator.logout(request, { redirectTo: "/login" });
 };
+
 
 export default function BaseBar({ children }: { children: ReactNode }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const data = useLoaderData<LoaderData>();
 
   return (
     <Box>
@@ -71,13 +67,14 @@ export default function BaseBar({ children }: { children: ReactNode }) {
             <Text m={"10px"} fontFamily={"mono"} fontWeight="light" fontSize="3xl">SuiiBell</Text>
           </Button>
           <Spacer />
-          {data.user ? (
-            <Button mr={"10px"} mt={"10px"} bgColor="blue.200" size={"sm"} >
-              <FiLogOut size={"xs"} />
-            </Button>
-          ) : (
-            redirect("/login")
-          )}
+          <Form method="post">
+            <button>
+              <Button mr={"10px"} mt={"10px"} bgColor="blue.200" size={"sm"}>
+                <FiLogOut size={"xs"} />
+              </Button>
+
+            </button>
+          </Form>
 
         </Flex>
         <Drawer

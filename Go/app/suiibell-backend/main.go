@@ -17,6 +17,9 @@ func main() {
 	// Routes
 	e.GET("/", hello)
 
+	api := e.Group("/api")
+	api.Use()
+
 	// Start server
 	e.Logger.Fatal(e.Start(":8000"))
 }

@@ -1,8 +1,34 @@
-FROM golang:1.18.2
+FROM --platform=linux/amd64 golang:1.18.2
 
+
+# cp local data
 RUN mkdir /app
 WORKDIR /app
 
 COPY  ./app/ /app/
+
+# Install idea plugins
+RUN apt-get update && apt-get install -y git curl unzip procps time
+ARG USERNAME=intellij
+ARG GROUPNAME=intellij
+ARG UID=1000
+ARG GID=1000
+ARG PROJDIR=/app/suiibell-backend
+
+ARG IDEURL=https://download.jetbrains.com/idea/ideaIU-2021.3.2.tar.gz
+
+RUN groupadd -g $GID $GROUPNAME && \
+  useradd -m -s /bin/bash -u $UID -g $GID $USERNAME
+USER $USERNAME
+WORKDIR /home/$USERNAME
+
+RUN curl -fsSL -o ide.tar.gz $IDEURL && \
+  mkdir ide && \
+  tar xfz ide.tar.gz --strip-components=1 -C ide && \
+  rm ide.tar.gz
+
+RUN time ide/bin/remote-dev-server.sh installPlugins $PROJDIR com.intellij.ja
+
+
 
 EXPOSE 8000

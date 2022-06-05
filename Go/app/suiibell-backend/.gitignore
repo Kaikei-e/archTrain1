@@ -1,2 +1,8 @@
+#SD_Store
 .DS_Store
+
+# env
 .env
+
+# id
+id_rsa

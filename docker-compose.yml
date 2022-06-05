@@ -21,7 +21,6 @@ services:
       app_net:
         ipv4_address: 172.16.238.30
 
-
   node:
     build: ./node
     container_name: node
@@ -34,19 +33,22 @@ services:
       app_net:
         ipv4_address: 172.16.238.20
 
-
   postgre:
     container_name: postgre
     build: ./DB/
-    environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
+    volumes:
+      - ./DB/init:/docker-entrypoint-initdb.d
+    env_file: ./DB/.env
+    # environment:
+    #   POSTGRES_USER: user1
+    #   POSTGRES_PASSWORD: "DB_USER1_PASS"
     ports:
       - 3308:3306
+
+    restart: always
     networks:
       app_net:
         ipv4_address: 172.16.238.40
-    restart: always
 
 networks:
   app_net:

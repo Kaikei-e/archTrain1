@@ -5,6 +5,7 @@ import (
 	"github.com/labstack/echo"
 	"github.com/pkg/errors"
 	"io/ioutil"
+	"suiibell/dbconn"
 )
 
 func LoginManager(e echo.Context) error {
@@ -14,6 +15,11 @@ func LoginManager(e echo.Context) error {
 	by, errRead := ioutil.ReadFile("./id_rsa")
 	if errRead != nil {
 		return errors.New("failed to read the rsa file.")
+	}
+
+	db, errOpen := dbconn.DBConnection()
+	if errOpen != nil {
+
 	}
 
 	rsa_pk, errParse := jwt.ParseRSAPrivateKeyFromPEM(by)

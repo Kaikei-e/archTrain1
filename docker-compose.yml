@@ -39,9 +39,9 @@ services:
     volumes:
       - ./DB/init:/docker-entrypoint-initdb.d
     env_file: ./DB/.env
-    # environment:
-    #   POSTGRES_USER: user1
-    #   POSTGRES_PASSWORD: "DB_USER1_PASS"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - 5432:5432
 

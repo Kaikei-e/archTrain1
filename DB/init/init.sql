@@ -1,8 +1,10 @@
 CREATE DATABASE suiibell;
 
-GRANT ALL PRIVILEGES ON suiibell.users TO user1;
+USE suiibell;
 
-SELECT suiibell;
+CREATE SCHEMA user;
+
+GRANT ALL PRIVILEGES ON suiibell.user.users TO user1;
 
 CREATE TABLE users (
       id            integer          primary key,

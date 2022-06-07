@@ -1,12 +1,10 @@
-CREATE USER user1;
-
 CREATE DATABASE suiibell;
 
-GRANT ALL PRIVILEGES ON DATABASE suiibell TO user1;
+GRANT ALL PRIVILEGES ON suiibell.users TO user1;
 
-\c user1
+SELECT suiibell;
 
-CREATE TABLE [IF NOt EXISTS] users (
+CREATE TABLE users (
       id            integer          primary key,
       password      varchar(32)      not null,
       created_at    timestamp        not null default current_timestamp,
@@ -14,4 +12,3 @@ CREATE TABLE [IF NOt EXISTS] users (
       token         varchar(32)      ,
       );
 
-      

@@ -26,6 +26,4 @@ RUN curl -fsSL -o ide.tar.gz $IDEURL && \
 
 RUN time ide/bin/remote-dev-server.sh installPlugins $PROJDIR com.intellij.ja
 
-RUN time ide/bin/remote-dev-server.sh installPlugins $PROJDIR com.intellij.ja
-
 EXPOSE 3000

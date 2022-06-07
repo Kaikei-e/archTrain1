@@ -43,7 +43,7 @@ services:
     #   POSTGRES_USER: user1
     #   POSTGRES_PASSWORD: "DB_USER1_PASS"
     ports:
-      - 3308:3306
+      - 5432:5432
 
     restart: always
     networks:

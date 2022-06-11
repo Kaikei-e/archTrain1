@@ -37,7 +37,7 @@ services:
     container_name: postgre
     build: ./DB/
     volumes:
-      - ./DB/init/:/docker-entrypoint-initdb.d
+      - ./DB/init/init.sql:/docker-entrypoint-initdb.d/init.sql
     env_file: ./DB/.env
     environment:
       POSTGRES_USER: ${POSTGRES_USER}

@@ -22,11 +22,12 @@ func EntInit() {
 	dbPass := os.Getenv("DB_PASS")
 	dbName := os.Getenv("DB_NAME")
 
-	dataSource := dbUser + ":" + dbPass + "@tcp(" + dbHost + ":5432" + ")/" + dbName
+	//"host=<host> port=<port> user=<user> dbname=<database> password=<pass>"
+	dataSource := "host=" + dbHost + " port=5432 user=" + dbUser + " dbname=" + dbName + " password=" + dbPass
 
 	client, err := ent.Open("postgres", dataSource)
 	if err != nil {
-		log.Fatalf("failed connecting to mysql: %v", err)
+		log.Fatalf("failed connecting to postgres: %v", err)
 	}
 	defer client.Close()
 	ctx := context.Background()

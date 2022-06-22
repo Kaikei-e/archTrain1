@@ -15,7 +15,7 @@ type User struct {
 func (User) Fields() []ent.Field {
 
 	return []ent.Field{
-		field.UUID("id", uuid.New()).Default(uuid.New()).Unique(),
+		field.UUID("id", uuid.New()).Unique(),
 		field.String("email").Unique().NotEmpty(),
 		field.String("password").NotEmpty(),
 		field.Int("failed_login_attempts").Default(0),

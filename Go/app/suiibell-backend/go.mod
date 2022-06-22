@@ -2,14 +2,21 @@ module suiibell
 
 go 1.18
 
-require github.com/labstack/echo v3.3.10+incompatible
+require (
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/joho/godotenv v1.4.0
+	github.com/labstack/echo v3.3.10+incompatible
+	github.com/pkg/errors v0.9.1
+	golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e
+	gorm.io/driver/postgres v1.3.7
+	gorm.io/gorm v1.23.5
+)
 
 require (
 	ariga.io/atlas v0.3.7-0.20220303204946-787354f533c3 // indirect
 	entgo.io/ent v0.10.1 // indirect
 	github.com/agext/levenshtein v1.2.1 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/go-openapi/inflect v0.19.0 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
@@ -29,22 +36,20 @@ require (
 	github.com/jackc/pgx/v4 v4.16.1 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
-	github.com/joho/godotenv v1.4.0 // indirect
 	github.com/labstack/gommon v0.3.1 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
+	github.com/lib/pq v1.10.6 // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/mattn/go-runewidth v0.0.9 // indirect
 	github.com/mitchellh/go-wordwrap v0.0.0-20150314170334-ad45545899c7 // indirect
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rs/zerolog v1.26.1 // indirect
 	github.com/spf13/cobra v1.3.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.1 // indirect
 	github.com/zclconf/go-cty v1.8.0 // indirect
-	golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e // indirect
 	golang.org/x/mod v0.5.1 // indirect
 	golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd // indirect
 	golang.org/x/oauth2 v0.0.0-20220608161450-d0670ef3b1eb // indirect
@@ -54,6 +59,4 @@ require (
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
-	gorm.io/driver/postgres v1.3.7 // indirect
-	gorm.io/gorm v1.23.5 // indirect
 )

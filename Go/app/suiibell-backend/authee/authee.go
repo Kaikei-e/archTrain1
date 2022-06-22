@@ -27,4 +27,11 @@ func LoginManager(e echo.Context) error {
 		return errors.New("failed to parse the rsa private key")
 	}
 
+	token := jwt.NewWithClaims(jwt.SigningMethodRS256, jwt.MapClaims{
+		"userid":   userid,
+		"password": password,
+	})
+
+	return nil
+
 }

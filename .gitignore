@@ -9,7 +9,7 @@ id_rsa
 
 
 # .idea
-.idea
+.idea/
 
 
 # Logs
@@ -116,4 +116,6 @@ dist
 
 # TernJS port file
 .tern-port
-Go/app/suiibell-backend/.idea/workspace.xml
+
+
+.idea/

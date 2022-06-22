@@ -1,4 +1,4 @@
-package targetStructs
+package anatomy
 
 type JWTUser struct {
 	UserID   string `json:"email" validate:"required"`

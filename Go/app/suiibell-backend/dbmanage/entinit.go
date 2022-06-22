@@ -23,7 +23,7 @@ func EntInit() {
 	dbName := os.Getenv("DB_NAME")
 
 	//"host=<host> port=<port> user=<user> dbname=<database> password=<pass>"
-	dataSource := "host=" + dbHost + " port=5432 user=" + dbUser + " dbname=" + dbName + " password=" + dbPass
+	dataSource := "host=" + dbHost + " port=5432 user=" + dbUser + " dbname=" + dbName + " password=" + dbPass + " sslmode=disable"
 
 	client, err := ent.Open("postgres", dataSource)
 	if err != nil {

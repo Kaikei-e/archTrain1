@@ -16,9 +16,9 @@ type User struct {
 func (User) Fields() []ent.Field {
 
 	return []ent.Field{
-		field.UUID("id", uuid.New()).Unique(),
-		field.String("email").Unique().NotEmpty(),
-		field.String("password").NotEmpty(),
+		field.UUID("id", uuid.UUID{}).Default(uuid.New),
+		field.String("email").Unique().NotEmpty().StructTag(`gqlgen:"email",required:"true"`),
+		field.String("password").NotEmpty().StructTag(`gqlgen:"password",required:"true"`),
 		field.Int("failed_login_attempts").Default(0),
 		field.Bool("is_blocked").Default(false),
 		field.Time("created_at").Default(time.Now),

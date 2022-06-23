@@ -4,6 +4,8 @@ package user
 
 import (
 	"time"
+
+	"github.com/google/uuid"
 )
 
 const (
@@ -66,4 +68,6 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultDeletedAt holds the default value on creation for the "deleted_at" field.
 	DefaultDeletedAt int
+	// DefaultID holds the default value on creation for the "id" field.
+	DefaultID func() uuid.UUID
 )

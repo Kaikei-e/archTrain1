@@ -2,6 +2,7 @@ package router
 
 import (
 	"github.com/labstack/echo"
+	"log"
 	"suiibell/authee"
 )
 
@@ -17,7 +18,10 @@ func AuthRouting(e *echo.Echo) error {
 	e.POST("/api/v1/register", func(context echo.Context) error {
 		err := authee.RegisterManager(context)
 		if err != nil {
-			return err
+			log.Println("failed to register the user : ", err)
+			context.JSON(500, map[string]string{
+				"error": "failed to register the user",
+			})
 		}
 		return nil
 	})

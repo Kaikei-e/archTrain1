@@ -14,13 +14,13 @@ import (
 
 // User is the model entity for the User schema.
 type User struct {
-	config `json:"-"`
+	config `gqlgen:"-" json:"-"`
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
 	// Email holds the value of the "email" field.
-	Email string `json:"email,omitempty"`
+	Email string `json:"email,omitempty" gqlgen:"email",required:"true"`
 	// Password holds the value of the "password" field.
-	Password string `json:"password,omitempty"`
+	Password string `json:"password,omitempty" gqlgen:"password",required:"true"`
 	// FailedLoginAttempts holds the value of the "failed_login_attempts" field.
 	FailedLoginAttempts int `json:"failed_login_attempts,omitempty"`
 	// IsBlocked holds the value of the "is_blocked" field.

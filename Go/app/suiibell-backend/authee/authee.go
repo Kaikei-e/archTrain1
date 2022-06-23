@@ -1,23 +1,29 @@
 package authee
 
 import (
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 	"github.com/pkg/errors"
 	"io/ioutil"
+	"suiibell/ent"
 	"time"
 )
 
 func LoginManager(e echo.Context) error {
-	email := e.FormValue("email")
-	password := e.FormValue("password")
+	var user ent.User
+
+	errBind := e.Bind(&user)
+	if errBind != nil {
+		return errors.New("failed to bind the user")
+	}
 
 	by, errRead := ioutil.ReadFile("./id_rsa")
 	if errRead != nil {
 		return errors.New("failed to read the rsa file.")
 	}
 
-	authedId, errAuth := LoginCheck(email, password)
+	authedId, errAuth := LoginCheck(user)
 	if errAuth != nil {
 		return errAuth
 	}
@@ -47,8 +53,14 @@ func LoginManager(e echo.Context) error {
 }
 
 func RegisterManager(e echo.Context) error {
-	email := e.FormValue("email")
-	password := e.FormValue("password")
+	var user ent.User
+
+	errBind := e.Bind(&user)
+	if errBind != nil {
+		return errors.New("failed to bind the user")
+	}
+
+	fmt.Println(user)
 
 	by, errRead := ioutil.ReadFile("./id_rsa")
 
@@ -56,14 +68,14 @@ func RegisterManager(e echo.Context) error {
 		return errors.New("failed to read the rsa file.")
 	}
 
-	errRegister := Register(email, password)
+	errRegister := Register(user)
 
 	if errRegister != nil {
 		return errors.New("failed to register the user")
 	}
 
 	claims := jwt.MapClaims{
-		"email": email,
+		"email": user.Email,
 		"exp":   time.Now().Add(time.Minute * 30).Unix(),
 	}
 

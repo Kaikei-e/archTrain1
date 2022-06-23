@@ -6,12 +6,11 @@ import (
 )
 
 type User struct {
-	ID           uint           `gorm:"primaryKey"`
-	Email        string         `gorm:"type:varchar(100);unique_index"`
-	Password     string         `gorm:"type:varchar(100)"`
-	FailedCount  int            `gorm:"type:int"`
-	FailedStatus bool           `gorm:"type:bool"`
-	CreatedAt    time.Time      `gorm:"default:current_timestamp"`
-	UpdatedAt    time.Time      `gorm:"default:current_timestamp"`
-	DeletedAt    gorm.DeletedAt `gorm:"index"`
+	ID                   string         `gorm:"primaryKey"`
+	Email                string         `gorm:"type:varchar(100);unique_index"`
+	FailedLoginAtttempts int            `gorm:"type:int"`
+	FailedStatus         bool           `gorm:"type:bool"`
+	CreatedAt            time.Time      `gorm:"default:current_timestamp"`
+	UpdatedAt            time.Time      `gorm:"default:current_timestamp"`
+	DeletedAt            gorm.DeletedAt `gorm:"index"`
 }

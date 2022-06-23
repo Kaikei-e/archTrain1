@@ -68,20 +68,25 @@ func RegisterManager(e echo.Context) error {
 		return errors.New("failed to read the rsa file.")
 	}
 
-	errRegister := Register(user)
+	registeredUser, errRegister := Register(user)
 
 	if errRegister != nil {
 		return errors.New("failed to register the user")
 	}
 
 	claims := jwt.MapClaims{
-		"email": user.Email,
+		"email": registeredUser.Email,
 		"exp":   time.Now().Add(time.Minute * 30).Unix(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
 
-	signedString, errSign := token.SignedString(by)
+	signedKey, errKey := jwt.ParseRSAPrivateKeyFromPEM(by)
+	if errKey != nil {
+		return errors.New("failed to parse the rsa private key")
+	}
+
+	signedString, errSign := token.SignedString(signedKey)
 	if errSign != nil {
 		return errors.New("failed to sign the token")
 	}

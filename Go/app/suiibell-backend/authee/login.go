@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/google/uuid"
 	"log"
+	"suiibell/anatomy/authAnatomy"
 	"suiibell/dbconn"
 	"suiibell/ent"
 	"suiibell/ent/user"
@@ -42,11 +43,12 @@ func LoginCheck(checkUser ent.User) (string, error) {
 	return user.Email, nil
 }
 
-func Register(user ent.User) error {
+func Register(user ent.User) (authAnatomy.User, error) {
+	var newUser authAnatomy.User
 
 	db, errOpen := dbconn.DBConnection()
 	if errOpen != nil {
-		return errors.New("failed to open the database")
+		return newUser, errors.New("failed to open the database")
 	}
 	defer db.Close()
 
@@ -61,8 +63,14 @@ func Register(user ent.User) error {
 	_, errSave := db.User.Create().SetEmail(user.Email).SetPassword(user.Password).Save(ctx)
 	if errSave != nil {
 		log.Println("failed to save the user : ", errSave)
-		return errSave
+		return newUser, errSave
 	}
 
-	return nil
+	newUser.Email = user.Email
+	newUser.ID = user.ID.String()
+	newUser.CreatedAt = user.CreatedAt.UTC()
+	newUser.UpdatedAt = user.UpdatedAt.UTC()
+	newUser.FailedLoginAtttempts = user.FailedLoginAttempts
+
+	return newUser, nil
 }

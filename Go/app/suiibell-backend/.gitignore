@@ -11,3 +11,5 @@ id_rsa
 .idea/
 /suiibell_rsa
 /suiibell_rsa.pub
+/suiibell_rsa.pkcs8
+/suiibell_rsa.pub.pkcs8

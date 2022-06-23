@@ -1,7 +1,7 @@
 package authee
 
 import (
-	"github.com/dgrijalva/jwt-go"
+	jwt "github.com/golang-jwt/jwt/v4"
 	"github.com/labstack/echo"
 	"github.com/pkg/errors"
 	"io/ioutil"
@@ -35,12 +35,6 @@ func LoginManager(e echo.Context) error {
 
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
 
-	//
-	//rsa_pk, errParse := jwt.ParseRSAPrivateKeyFromPEM(by)
-	//if errParse != nil {
-	//	return errors.New("failed to parse the rsa private key")
-	//}
-
 	signedString, err := token.SignedString(by)
 	if err != nil {
 		return errors.New("failed to sign the token")
@@ -70,7 +64,7 @@ func RegisterManager(e echo.Context) error {
 		return errors.New("failed to register the user")
 	}
 
-	by, errRead := ioutil.ReadFile("./suiibell_rsa")
+	by, errRead := ioutil.ReadFile("./suiibell_rsa.pkcs8")
 	if errRead != nil {
 		return errors.New("failed to read the rsa file.")
 	}

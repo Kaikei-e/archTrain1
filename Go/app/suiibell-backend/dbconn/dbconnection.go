@@ -2,13 +2,12 @@ package dbconn
 
 import (
 	"github.com/joho/godotenv"
-	"github.com/pkg/errors"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
+	"log"
 	"os"
+	"suiibell/ent"
 )
 
-func DBConnection() (*gorm.DB, error) {
+func DBConnection() (*ent.Client, error) {
 	err := godotenv.Load(".env")
 	if err != nil {
 		panic("error loading .env file")
@@ -21,11 +20,16 @@ func DBConnection() (*gorm.DB, error) {
 
 	//dsn := "host=" + dbHost + "user=" + dbUser + "password=" + dbPass + "dbname=" + dbName + "port=3306 sslmode=disable"
 	dataSource := "host=" + dbHost + " port=5432 user=" + dbUser + " dbname=" + dbName + " password=" + dbPass + " sslmode=disable"
+	//
+	//db, err := gorm.Open(postgres.Open(dataSource), &gorm.Config{})
+	//if err != nil {
+	//	return nil, errors.New("failed to initialize db connection")
+	//}
 
-	db, err := gorm.Open(postgres.Open(dataSource), &gorm.Config{})
+	client, err := ent.Open("postgres", dataSource)
 	if err != nil {
-		return nil, errors.New("failed to initialize db connection")
+		log.Fatalf("failed opening connection to postgres: %v", err)
 	}
 
-	return db, err
+	return client, err
 }

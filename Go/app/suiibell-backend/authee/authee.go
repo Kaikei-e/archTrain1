@@ -9,7 +9,7 @@ import (
 )
 
 func LoginManager(e echo.Context) error {
-	userid := e.FormValue("email")
+	email := e.FormValue("email")
 	password := e.FormValue("password")
 
 	by, errRead := ioutil.ReadFile("./id_rsa")
@@ -17,14 +17,14 @@ func LoginManager(e echo.Context) error {
 		return errors.New("failed to read the rsa file.")
 	}
 
-	authedId, errAuth := LoginCheck(userid, password)
+	authedId, errAuth := LoginCheck(email, password)
 	if errAuth != nil {
 		return errAuth
 	}
 
 	claims := jwt.MapClaims{
-		"userid": authedId,
-		"exp":    time.Now().Add(time.Minute * 30).Unix(),
+		"email": authedId,
+		"exp":   time.Now().Add(time.Minute * 30).Unix(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
@@ -47,7 +47,7 @@ func LoginManager(e echo.Context) error {
 }
 
 func RegisterManager(e echo.Context) error {
-	userid := e.FormValue("email")
+	email := e.FormValue("email")
 	password := e.FormValue("password")
 
 	by, errRead := ioutil.ReadFile("./id_rsa")
@@ -56,15 +56,15 @@ func RegisterManager(e echo.Context) error {
 		return errors.New("failed to read the rsa file.")
 	}
 
-	errRegister := Register(userid, password)
+	errRegister := Register(email, password)
 
 	if errRegister != nil {
 		return errors.New("failed to register the user")
 	}
 
 	claims := jwt.MapClaims{
-		"userid": userid,
-		"exp":    time.Now().Add(time.Minute * 30).Unix(),
+		"email": email,
+		"exp":   time.Now().Add(time.Minute * 30).Unix(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)

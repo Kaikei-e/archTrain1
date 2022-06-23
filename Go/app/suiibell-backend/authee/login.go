@@ -1,24 +1,26 @@
 package authee
 
 import (
+	"context"
 	"errors"
-	"log"
-	"suiibell/anatomy/authAnatomy"
+	"github.com/google/uuid"
 	"suiibell/dbconn"
-	"suiibell/ent"
+	"suiibell/ent/user"
 )
 
-func LoginCheck(userid, password string) (string, error) {
-	var user authAnatomy.User
+func LoginCheck(email, password string) (string, error) {
 
 	db, errOpen := dbconn.DBConnection()
 	if errOpen != nil {
 		return "", errors.New("failed to open the database")
 	}
+	defer db.Close()
 
-	tx := db.Where("email = ?", userid).First(&user)
-	if tx.Error != nil {
-		return "", errors.New("failed to find the user")
+	ctx := context.Background()
+
+	user, errQuery := db.User.Query().Where(user.Email(email)).Only(ctx)
+	if errQuery != nil {
+		return "", errQuery
 	}
 
 	isSuccess, errCompare := CompareHashedPassAndInput([]byte(user.Password), []byte(password))
@@ -30,31 +32,27 @@ func LoginCheck(userid, password string) (string, error) {
 		return "", errors.New("failed to compare the hashed password and input password")
 	}
 
-	if user.FailedStatus {
+	if user.IsBlocked {
 		return "", errors.New("the user is blocked")
 	}
 
 	return user.Email, nil
 }
 
-func Register(userid, password string) error {
-	var user ent.User
+func Register(email, password string) error {
+	//var user ent.User
 
 	db, errOpen := dbconn.DBConnection()
 	if errOpen != nil {
 		return errors.New("failed to open the database")
 	}
+	defer db.Close()
 
-	db.Where("email = ?", userid).First(&user)
-	if user.Email != "" {
-		log.Println("the user is already registered")
-		return errors.New("the user already exists")
-	}
+	ctx := context.Background()
 
-	tx := db.Create(&user)
-	if tx.Error != nil {
-		log.Println("failed to create the user")
-		return errors.New("failed to create the user")
+	_, errSave := db.User.Create().SetID(uuid.New()).SetEmail(email).SetPassword(password).Save(ctx)
+	if errSave != nil {
+		return errSave
 	}
 
 	return nil

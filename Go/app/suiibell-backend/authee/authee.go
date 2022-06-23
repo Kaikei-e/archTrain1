@@ -1,11 +1,11 @@
 package authee
 
 import (
-	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 	"github.com/pkg/errors"
 	"io/ioutil"
+	"suiibell/anatomy/authAnatomy"
 	"suiibell/ent"
 	"time"
 )
@@ -53,25 +53,31 @@ func LoginManager(e echo.Context) error {
 }
 
 func RegisterManager(e echo.Context) error {
+	var incomeUserInfo authAnatomy.UserCredential
 	var user ent.User
 
-	errBind := e.Bind(&user)
+	errBind := e.Bind(&incomeUserInfo)
 	if errBind != nil {
 		return errors.New("failed to bind the user")
 	}
 
-	fmt.Println(user)
-
-	by, errRead := ioutil.ReadFile("./suiibell_rsa")
-
-	if errRead != nil {
-		return errors.New("failed to read the rsa file.")
-	}
+	user.Email = incomeUserInfo.Email
+	user.Password = []byte(incomeUserInfo.Password)
 
 	registeredUser, errRegister := Register(user)
 
 	if errRegister != nil {
 		return errors.New("failed to register the user")
+	}
+
+	by, errRead := ioutil.ReadFile("./suiibell_rsa")
+	if errRead != nil {
+		return errors.New("failed to read the rsa file.")
+	}
+
+	signedKey, errKey := jwt.ParseRSAPrivateKeyFromPEM(by)
+	if errKey != nil {
+		return errors.New("failed to parse the rsa private key")
 	}
 
 	claims := jwt.MapClaims{
@@ -80,11 +86,6 @@ func RegisterManager(e echo.Context) error {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
-
-	signedKey, errKey := jwt.ParseRSAPrivateKeyFromPEM(by)
-	if errKey != nil {
-		return errors.New("failed to parse the rsa private key")
-	}
 
 	signedString, errSign := token.SignedString(signedKey)
 	if errSign != nil {

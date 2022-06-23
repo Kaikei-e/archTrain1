@@ -5,6 +5,7 @@ package ent
 import (
 	"suiibell/ent/schema"
 	"suiibell/ent/user"
+	"time"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -29,4 +30,16 @@ func init() {
 	userDescIsBlocked := userFields[4].Descriptor()
 	// user.DefaultIsBlocked holds the default value on creation for the is_blocked field.
 	user.DefaultIsBlocked = userDescIsBlocked.Default.(bool)
+	// userDescCreatedAt is the schema descriptor for created_at field.
+	userDescCreatedAt := userFields[5].Descriptor()
+	// user.DefaultCreatedAt holds the default value on creation for the created_at field.
+	user.DefaultCreatedAt = userDescCreatedAt.Default.(func() time.Time)
+	// userDescUpdatedAt is the schema descriptor for updated_at field.
+	userDescUpdatedAt := userFields[6].Descriptor()
+	// user.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	user.UpdateDefaultUpdatedAt = userDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// userDescDeletedAt is the schema descriptor for deleted_at field.
+	userDescDeletedAt := userFields[7].Descriptor()
+	// user.DefaultDeletedAt holds the default value on creation for the deleted_at field.
+	user.DefaultDeletedAt = userDescDeletedAt.Default.(int)
 }

@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"suiibell/ent/user"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -56,6 +57,40 @@ func (uc *UserCreate) SetIsBlocked(b bool) *UserCreate {
 func (uc *UserCreate) SetNillableIsBlocked(b *bool) *UserCreate {
 	if b != nil {
 		uc.SetIsBlocked(*b)
+	}
+	return uc
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (uc *UserCreate) SetCreatedAt(t time.Time) *UserCreate {
+	uc.mutation.SetCreatedAt(t)
+	return uc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (uc *UserCreate) SetNillableCreatedAt(t *time.Time) *UserCreate {
+	if t != nil {
+		uc.SetCreatedAt(*t)
+	}
+	return uc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (uc *UserCreate) SetUpdatedAt(t time.Time) *UserCreate {
+	uc.mutation.SetUpdatedAt(t)
+	return uc
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (uc *UserCreate) SetDeletedAt(i int) *UserCreate {
+	uc.mutation.SetDeletedAt(i)
+	return uc
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (uc *UserCreate) SetNillableDeletedAt(i *int) *UserCreate {
+	if i != nil {
+		uc.SetDeletedAt(*i)
 	}
 	return uc
 }
@@ -145,6 +180,14 @@ func (uc *UserCreate) defaults() {
 		v := user.DefaultIsBlocked
 		uc.mutation.SetIsBlocked(v)
 	}
+	if _, ok := uc.mutation.CreatedAt(); !ok {
+		v := user.DefaultCreatedAt()
+		uc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := uc.mutation.DeletedAt(); !ok {
+		v := user.DefaultDeletedAt
+		uc.mutation.SetDeletedAt(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -170,6 +213,15 @@ func (uc *UserCreate) check() error {
 	}
 	if _, ok := uc.mutation.IsBlocked(); !ok {
 		return &ValidationError{Name: "is_blocked", err: errors.New(`ent: missing required field "User.is_blocked"`)}
+	}
+	if _, ok := uc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "User.created_at"`)}
+	}
+	if _, ok := uc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "User.updated_at"`)}
+	}
+	if _, ok := uc.mutation.DeletedAt(); !ok {
+		return &ValidationError{Name: "deleted_at", err: errors.New(`ent: missing required field "User.deleted_at"`)}
 	}
 	return nil
 }
@@ -238,6 +290,30 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			Column: user.FieldIsBlocked,
 		})
 		_node.IsBlocked = value
+	}
+	if value, ok := uc.mutation.CreatedAt(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: user.FieldCreatedAt,
+		})
+		_node.CreatedAt = value
+	}
+	if value, ok := uc.mutation.UpdatedAt(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: user.FieldUpdatedAt,
+		})
+		_node.UpdatedAt = value
+	}
+	if value, ok := uc.mutation.DeletedAt(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: user.FieldDeletedAt,
+		})
+		_node.DeletedAt = value
 	}
 	return _node, _spec
 }

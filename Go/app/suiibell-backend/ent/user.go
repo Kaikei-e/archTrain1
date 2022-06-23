@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 	"suiibell/ent/user"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
@@ -24,6 +25,12 @@ type User struct {
 	FailedLoginAttempts int `json:"failed_login_attempts,omitempty"`
 	// IsBlocked holds the value of the "is_blocked" field.
 	IsBlocked bool `json:"is_blocked,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// DeletedAt holds the value of the "deleted_at" field.
+	DeletedAt int `json:"deleted_at,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -33,10 +40,12 @@ func (*User) scanValues(columns []string) ([]interface{}, error) {
 		switch columns[i] {
 		case user.FieldIsBlocked:
 			values[i] = new(sql.NullBool)
-		case user.FieldFailedLoginAttempts:
+		case user.FieldFailedLoginAttempts, user.FieldDeletedAt:
 			values[i] = new(sql.NullInt64)
 		case user.FieldEmail, user.FieldPassword:
 			values[i] = new(sql.NullString)
+		case user.FieldCreatedAt, user.FieldUpdatedAt:
+			values[i] = new(sql.NullTime)
 		case user.FieldID:
 			values[i] = new(uuid.UUID)
 		default:
@@ -84,6 +93,24 @@ func (u *User) assignValues(columns []string, values []interface{}) error {
 			} else if value.Valid {
 				u.IsBlocked = value.Bool
 			}
+		case user.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				u.CreatedAt = value.Time
+			}
+		case user.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				u.UpdatedAt = value.Time
+			}
+		case user.FieldDeletedAt:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
+			} else if value.Valid {
+				u.DeletedAt = int(value.Int64)
+			}
 		}
 	}
 	return nil
@@ -120,6 +147,12 @@ func (u *User) String() string {
 	builder.WriteString(fmt.Sprintf("%v", u.FailedLoginAttempts))
 	builder.WriteString(", is_blocked=")
 	builder.WriteString(fmt.Sprintf("%v", u.IsBlocked))
+	builder.WriteString(", created_at=")
+	builder.WriteString(u.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", updated_at=")
+	builder.WriteString(u.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", deleted_at=")
+	builder.WriteString(fmt.Sprintf("%v", u.DeletedAt))
 	builder.WriteByte(')')
 	return builder.String()
 }

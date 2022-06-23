@@ -2,8 +2,10 @@ package authee
 
 import (
 	"errors"
+	"log"
 	"suiibell/anatomy/authAnatomy"
 	"suiibell/dbconn"
+	"suiibell/ent"
 )
 
 func LoginCheck(userid, password string) (string, error) {
@@ -36,7 +38,7 @@ func LoginCheck(userid, password string) (string, error) {
 }
 
 func Register(userid, password string) error {
-	var user authAnatomy.User
+	var user ent.User
 
 	db, errOpen := dbconn.DBConnection()
 	if errOpen != nil {
@@ -45,11 +47,13 @@ func Register(userid, password string) error {
 
 	db.Where("email = ?", userid).First(&user)
 	if user.Email != "" {
+		log.Println("the user is already registered")
 		return errors.New("the user already exists")
 	}
 
 	tx := db.Create(&user)
 	if tx.Error != nil {
+		log.Println("failed to create the user")
 		return errors.New("failed to create the user")
 	}
 

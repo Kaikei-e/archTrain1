@@ -2,6 +2,10 @@
 
 package user
 
+import (
+	"time"
+)
+
 const (
 	// Label holds the string label denoting the user type in the database.
 	Label = "user"
@@ -15,6 +19,12 @@ const (
 	FieldFailedLoginAttempts = "failed_login_attempts"
 	// FieldIsBlocked holds the string denoting the is_blocked field in the database.
 	FieldIsBlocked = "is_blocked"
+	// FieldCreatedAt holds the string denoting the created_at field in the database.
+	FieldCreatedAt = "created_at"
+	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
+	FieldUpdatedAt = "updated_at"
+	// FieldDeletedAt holds the string denoting the deleted_at field in the database.
+	FieldDeletedAt = "deleted_at"
 	// Table holds the table name of the user in the database.
 	Table = "users"
 )
@@ -26,6 +36,9 @@ var Columns = []string{
 	FieldPassword,
 	FieldFailedLoginAttempts,
 	FieldIsBlocked,
+	FieldCreatedAt,
+	FieldUpdatedAt,
+	FieldDeletedAt,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -47,4 +60,10 @@ var (
 	DefaultFailedLoginAttempts int
 	// DefaultIsBlocked holds the default value on creation for the "is_blocked" field.
 	DefaultIsBlocked bool
+	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
+	DefaultCreatedAt func() time.Time
+	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
+	UpdateDefaultUpdatedAt func() time.Time
+	// DefaultDeletedAt holds the default value on creation for the "deleted_at" field.
+	DefaultDeletedAt int
 )

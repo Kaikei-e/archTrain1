@@ -62,7 +62,7 @@ func RegisterManager(e echo.Context) error {
 
 	fmt.Println(user)
 
-	by, errRead := ioutil.ReadFile("./id_rsa")
+	by, errRead := ioutil.ReadFile("./suiibell_rsa")
 
 	if errRead != nil {
 		return errors.New("failed to read the rsa file.")

@@ -20,7 +20,7 @@ type User struct {
 	// Email holds the value of the "email" field.
 	Email string `json:"email,omitempty" gqlgen:"email",required:"true"`
 	// Password holds the value of the "password" field.
-	Password string `json:"password,omitempty" gqlgen:"password",required:"true"`
+	Password []byte `json:"password,omitempty" gqlgen:"password",required:"true"`
 	// FailedLoginAttempts holds the value of the "failed_login_attempts" field.
 	FailedLoginAttempts int `json:"failed_login_attempts,omitempty"`
 	// IsBlocked holds the value of the "is_blocked" field.
@@ -38,11 +38,13 @@ func (*User) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case user.FieldPassword:
+			values[i] = new([]byte)
 		case user.FieldIsBlocked:
 			values[i] = new(sql.NullBool)
 		case user.FieldFailedLoginAttempts, user.FieldDeletedAt:
 			values[i] = new(sql.NullInt64)
-		case user.FieldEmail, user.FieldPassword:
+		case user.FieldEmail:
 			values[i] = new(sql.NullString)
 		case user.FieldCreatedAt, user.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -76,10 +78,10 @@ func (u *User) assignValues(columns []string, values []interface{}) error {
 				u.Email = value.String
 			}
 		case user.FieldPassword:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field password", values[i])
-			} else if value.Valid {
-				u.Password = value.String
+			} else if value != nil {
+				u.Password = *value
 			}
 		case user.FieldFailedLoginAttempts:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -142,7 +144,7 @@ func (u *User) String() string {
 	builder.WriteString(", email=")
 	builder.WriteString(u.Email)
 	builder.WriteString(", password=")
-	builder.WriteString(u.Password)
+	builder.WriteString(fmt.Sprintf("%v", u.Password))
 	builder.WriteString(", failed_login_attempts=")
 	builder.WriteString(fmt.Sprintf("%v", u.FailedLoginAttempts))
 	builder.WriteString(", is_blocked=")

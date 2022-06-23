@@ -35,7 +35,7 @@ type UserMutation struct {
 	typ                      string
 	id                       *uuid.UUID
 	email                    *string
-	password                 *string
+	password                 *[]byte
 	failed_login_attempts    *int
 	addfailed_login_attempts *int
 	is_blocked               *bool
@@ -190,12 +190,12 @@ func (m *UserMutation) ResetEmail() {
 }
 
 // SetPassword sets the "password" field.
-func (m *UserMutation) SetPassword(s string) {
-	m.password = &s
+func (m *UserMutation) SetPassword(b []byte) {
+	m.password = &b
 }
 
 // Password returns the value of the "password" field in the mutation.
-func (m *UserMutation) Password() (r string, exists bool) {
+func (m *UserMutation) Password() (r []byte, exists bool) {
 	v := m.password
 	if v == nil {
 		return
@@ -206,7 +206,7 @@ func (m *UserMutation) Password() (r string, exists bool) {
 // OldPassword returns the old "password" field's value of the User entity.
 // If the User object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserMutation) OldPassword(ctx context.Context) (v string, err error) {
+func (m *UserMutation) OldPassword(ctx context.Context) (v []byte, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldPassword is only allowed on UpdateOne operations")
 	}
@@ -548,7 +548,7 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 		m.SetEmail(v)
 		return nil
 	case user.FieldPassword:
-		v, ok := value.(string)
+		v, ok := value.([]byte)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}

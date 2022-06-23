@@ -4,9 +4,11 @@ import (
 	"context"
 	"errors"
 	"github.com/google/uuid"
+	"log"
 	"suiibell/dbconn"
 	"suiibell/ent"
 	"suiibell/ent/user"
+	"time"
 )
 
 func LoginCheck(checkUser ent.User) (string, error) {
@@ -50,8 +52,15 @@ func Register(user ent.User) error {
 
 	ctx := context.Background()
 
-	_, errSave := db.User.Create().SetID(uuid.New()).SetEmail(user.Email).SetPassword(user.Password).Save(ctx)
+	user.ID = uuid.New()
+	user.IsBlocked = false
+	user.CreatedAt = time.Now().UTC()
+	user.UpdatedAt = time.Now().UTC()
+	user.FailedLoginAttempts = 0
+
+	_, errSave := db.User.Create().SetEmail(user.Email).SetPassword(user.Password).Save(ctx)
 	if errSave != nil {
+		log.Println("failed to save the user : ", errSave)
 		return errSave
 	}
 

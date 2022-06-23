@@ -81,14 +81,6 @@ func (uu *UserUpdate) SetCreatedAt(t time.Time) *UserUpdate {
 	return uu
 }
 
-// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableCreatedAt(t *time.Time) *UserUpdate {
-	if t != nil {
-		uu.SetCreatedAt(*t)
-	}
-	return uu
-}
-
 // SetUpdatedAt sets the "updated_at" field.
 func (uu *UserUpdate) SetUpdatedAt(t time.Time) *UserUpdate {
 	uu.mutation.SetUpdatedAt(t)
@@ -184,6 +176,10 @@ func (uu *UserUpdate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (uu *UserUpdate) defaults() {
+	if _, ok := uu.mutation.CreatedAt(); !ok {
+		v := user.UpdateDefaultCreatedAt()
+		uu.mutation.SetCreatedAt(v)
+	}
 	if _, ok := uu.mutation.UpdatedAt(); !ok {
 		v := user.UpdateDefaultUpdatedAt()
 		uu.mutation.SetUpdatedAt(v)
@@ -358,14 +354,6 @@ func (uuo *UserUpdateOne) SetCreatedAt(t time.Time) *UserUpdateOne {
 	return uuo
 }
 
-// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableCreatedAt(t *time.Time) *UserUpdateOne {
-	if t != nil {
-		uuo.SetCreatedAt(*t)
-	}
-	return uuo
-}
-
 // SetUpdatedAt sets the "updated_at" field.
 func (uuo *UserUpdateOne) SetUpdatedAt(t time.Time) *UserUpdateOne {
 	uuo.mutation.SetUpdatedAt(t)
@@ -468,6 +456,10 @@ func (uuo *UserUpdateOne) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (uuo *UserUpdateOne) defaults() {
+	if _, ok := uuo.mutation.CreatedAt(); !ok {
+		v := user.UpdateDefaultCreatedAt()
+		uuo.mutation.SetCreatedAt(v)
+	}
 	if _, ok := uuo.mutation.UpdatedAt(); !ok {
 		v := user.UpdateDefaultUpdatedAt()
 		uuo.mutation.SetUpdatedAt(v)

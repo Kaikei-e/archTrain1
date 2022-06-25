@@ -32,7 +32,6 @@ export const action: ActionFunction = async ({ request, context }) => {
 
 export default function LoginPage() {
   const loaderData = useLoaderData();
-  console.log(loaderData);
   return (
     <Box
       w={"100vw"}

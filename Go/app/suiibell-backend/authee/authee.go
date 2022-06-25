@@ -22,7 +22,7 @@ func LoginManager(e echo.Context) error {
 	}
 
 	user.Email = incomeUserInfo.Email
-	user.Password = []byte(incomeUserInfo.Password)
+	user.Password = incomeUserInfo.Password
 
 	by, errRead := ioutil.ReadFile("./pkcs8.key")
 	if errRead != nil {
@@ -34,7 +34,7 @@ func LoginManager(e echo.Context) error {
 
 	authedId, errAuth := LoginCheck(user)
 	if errAuth != nil {
-		log.Println(errors.New("failed to authenticate the user"))
+		log.Println(errAuth)
 		log.Printf("Incoming IP : %s", e.RealIP())
 		return e.JSON(http.StatusBadRequest, map[string]string{
 			"error": "failed to login the user",
@@ -69,7 +69,7 @@ func RegisterManager(e echo.Context) error {
 	}
 
 	user.Email = incomeUserInfo.Email
-	user.Password = []byte(incomeUserInfo.Password)
+	user.Password = incomeUserInfo.Password
 
 	registeredUser, errRegister := Register(user)
 	if errRegister != nil {

@@ -57,7 +57,7 @@ var (
 	// EmailValidator is a validator for the "email" field. It is called by the builders before save.
 	EmailValidator func(string) error
 	// PasswordValidator is a validator for the "password" field. It is called by the builders before save.
-	PasswordValidator func([]byte) error
+	PasswordValidator func(string) error
 	// DefaultFailedLoginAttempts holds the default value on creation for the "failed_login_attempts" field.
 	DefaultFailedLoginAttempts int
 	// DefaultIsBlocked holds the default value on creation for the "is_blocked" field.

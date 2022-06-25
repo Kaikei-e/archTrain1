@@ -41,12 +41,12 @@ func Register(registerUser ent.User) (authAnatomy.User, error) {
 	registerUser.UpdatedAt = time.Now().UTC()
 	registerUser.FailedLoginAttempts = 0
 
-	pass, errEncrypt := EncryptPass(string(registerUser.Password))
+	pass, errEncrypt := EncryptPass(registerUser.Password)
 	if errEncrypt != nil {
 		return newUser, errors.New("failed to encrypt the password")
 	}
 
-	_, errSave := db.User.Create().SetEmail(registerUser.Email).SetPassword(pass).Save(ctx)
+	_, errSave := db.User.Create().SetEmail(registerUser.Email).SetPassword(string(pass)).Save(ctx)
 	if errSave != nil {
 		log.Println("failed to save the registerUser : ", errSave)
 		return newUser, errSave

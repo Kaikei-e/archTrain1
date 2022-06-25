@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"suiibell/initRun"
 	"suiibell/router"
 
@@ -20,7 +19,9 @@ func main() {
 
 	// Routes
 	errAuth := router.AuthRouting(e)
-	log.Fatalf("failed to register the api routing : %s", errAuth)
+	if errAuth != nil {
+		panic(errAuth)
+	}
 
 	// Start server
 	e.Logger.Fatal(e.Start(":8000"))

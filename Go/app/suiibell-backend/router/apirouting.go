@@ -1,3 +1,4 @@
+// Package router for api routing
 package router
 
 import (
@@ -6,6 +7,7 @@ import (
 	"suiibell/authee"
 )
 
+// AuthRouting is the function to handle the api routing
 func AuthRouting(e *echo.Echo) error {
 	e.POST("/api/v1/login", func(context echo.Context) error {
 		err := authee.LoginManager(context)

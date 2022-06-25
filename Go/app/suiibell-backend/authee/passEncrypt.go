@@ -5,6 +5,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// EncryptPass encrypts the password with bcrypt
 func EncryptPass(password string) ([]byte, error) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
@@ -15,6 +16,7 @@ func EncryptPass(password string) ([]byte, error) {
 
 }
 
+// CompareHashedPassAndInput compares the hashed password and input password
 func CompareHashedPassAndInput(hashedPass, inputPass []byte) (bool, error) {
 	err := bcrypt.CompareHashAndPassword(hashedPass, inputPass)
 	if err != nil {

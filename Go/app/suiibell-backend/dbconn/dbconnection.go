@@ -18,14 +18,10 @@ func DBConnection() (*ent.Client, error) {
 	dbPass := os.Getenv("DB_PASS")
 	dbName := os.Getenv("DB_NAME")
 
-	//dsn := "host=" + dbHost + "user=" + dbUser + "password=" + dbPass + "dbname=" + dbName + "port=3306 sslmode=disable"
+	// dataSource is the format of postgres connection string
 	dataSource := "host=" + dbHost + " port=5432 user=" + dbUser + " dbname=" + dbName + " password=" + dbPass + " sslmode=disable"
-	//
-	//db, err := gorm.Open(postgres.Open(dataSource), &gorm.Config{})
-	//if err != nil {
-	//	return nil, errors.New("failed to initialize db connection")
-	//}
 
+	// client is the connection pointer of ent
 	client, err := ent.Open("postgres", dataSource)
 	if err != nil {
 		log.Fatalf("failed opening connection to postgres: %v", err)

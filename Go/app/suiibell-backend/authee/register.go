@@ -35,6 +35,7 @@ func Register(registerUser ent.User) (authAnatomy.User, error) {
 		return newUser, errors.New("the user is already registered")
 	}
 
+	// initialize the user data with the input data
 	registerUser.ID = uuid.New()
 	registerUser.IsBlocked = false
 	registerUser.CreatedAt = time.Now().UTC()
@@ -52,11 +53,12 @@ func Register(registerUser ent.User) (authAnatomy.User, error) {
 		return newUser, errSave
 	}
 
+	// initialize the user data with the registered data
 	newUser.Email = registerUser.Email
 	newUser.ID = registerUser.ID.String()
 	newUser.CreatedAt = registerUser.CreatedAt.UTC()
 	newUser.UpdatedAt = registerUser.UpdatedAt.UTC()
-	newUser.FailedLoginAtttempts = registerUser.FailedLoginAttempts
+	newUser.FailedLoginAttempts = registerUser.FailedLoginAttempts
 
 	return newUser, nil
 }

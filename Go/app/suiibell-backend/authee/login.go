@@ -3,15 +3,12 @@ package authee
 import (
 	"context"
 	"errors"
-	"log"
 	"suiibell/dbconn"
 	"suiibell/ent"
 	"suiibell/ent/user"
 )
 
 func LoginCheck(checkUser ent.User) (string, error) {
-
-	log.Println("checkUser : ", checkUser)
 
 	db, errOpen := dbconn.DBConnection()
 	if errOpen != nil {

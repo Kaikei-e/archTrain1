@@ -12,6 +12,7 @@ import (
 	"time"
 )
 
+// LoginManager is the function to authenticate the user
 func LoginManager(e echo.Context) error {
 	var incomeUserInfo authAnatomy.UserCredential
 	var user ent.User
@@ -24,6 +25,7 @@ func LoginManager(e echo.Context) error {
 	user.Email = incomeUserInfo.Email
 	user.Password = incomeUserInfo.Password
 
+	// call the login function to authenticate the user and get the user email
 	authedId, errAuth := LoginCheck(user)
 	if errAuth != nil {
 		log.Println(errAuth)
@@ -65,7 +67,10 @@ func LoginManager(e echo.Context) error {
 
 }
 
+// RegisterManager is the function to register the user
 func RegisterManager(e echo.Context) error {
+
+	// declare the user struct to store the user information for minimum information
 	var incomeUserInfo authAnatomy.UserCredential
 	var user ent.User
 
@@ -74,14 +79,17 @@ func RegisterManager(e echo.Context) error {
 		return errors.New("failed to bind the user")
 	}
 
+	// pass the user information to the ent.user struct
 	user.Email = incomeUserInfo.Email
 	user.Password = incomeUserInfo.Password
 
+	// call the register function to register the user
 	registeredUser, errRegister := Register(user)
 	if errRegister != nil {
 		return errRegister
 	}
 
+	// file format must be the format of pkcs
 	by, errRead := ioutil.ReadFile("./pkcs8.key")
 	if errRead != nil {
 		return errors.New("failed to read the rsa file.")

@@ -6,9 +6,17 @@
 
 # id
 id_rsa
+id_rsa.pub
+
+/keypair.pem
+/pkcs8.key
+/publickey.crt
 
 # .idea
 .idea/
+
+
+# rsa
 /suiibell_rsa
 /suiibell_rsa.pub
 /suiibell_rsa.pkcs8

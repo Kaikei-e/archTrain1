@@ -64,7 +64,7 @@ func RegisterManager(e echo.Context) error {
 		return errors.New("failed to register the user")
 	}
 
-	by, errRead := ioutil.ReadFile("./suiibell_rsa.pkcs8")
+	by, errRead := ioutil.ReadFile("./pkcs8.key")
 	if errRead != nil {
 		return errors.New("failed to read the rsa file.")
 	}

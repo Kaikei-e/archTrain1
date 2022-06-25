@@ -59,6 +59,7 @@ func LoginManager(e echo.Context) error {
 	}
 
 	return e.JSON(200, map[string]string{
+		"email": authedId,
 		"token": signedString,
 	})
 

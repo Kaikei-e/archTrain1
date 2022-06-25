@@ -19,60 +19,48 @@ authenticator.use(
       throw new AuthorizationError('Bad Credentials: user ID must be a string')
 
     if (!password || password?.length === 0) throw new AuthorizationError('Bad Credentials: Password is required')
-    if (typeof password !== 'string')
+    if (typeof password !== 'string') {
       throw new AuthorizationError('Bad Credentials: Password must be a string')
 
-    if (email === 'hogehoge@mail.com' && password === 'hogehoge1') {
-      const hostIP = configuration['go-host']
-      const hostPort = configuration['go-port']
-      const hostPath = configuration['go-path']
-
-
-      const userDataJson = await fetch(`${hostIP}:${hostPort}${hostPath}/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
-      }).then(res => {
-        if (res.status === 200) {
-          return res.json();
-        } else {
-          throw new AuthorizationError('Bad Credentials: Invalid email or password');
-        }
-      }
-
-      ).catch(err => {
-        throw new AuthorizationError('Bad Credentials: Invalid email or password');
-      }
-      );
-
-      const userData: User = {
-        email: userDataJson.email,
-        token: userDataJson.token,
-      };
-
-
-
-      // user = {
-      //     email: email,
-      //     token: `${password}-${new Date().getTime()}`,
-      //   };
-
-      // // the type of this user must match the type you pass to the Authenticator
-      // // the strategy will automatically inherit the type if you instantiate
-      // // directly inside the `use` method
-      return await Promise.resolve({ ...userData});
-
-    } else {
-      // if problem with user throw error AuthorizationError
-      throw new AuthorizationError("Bad Credentials")
     }
 
-  }),
+    const hostIP = configuration['go-host']
+    const hostPort = configuration['go-port']
+    const hostPath = configuration['go-path']
+
+    const userDataJson = await fetch(`${hostIP}:${hostPort}${hostPath}/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+    }).then(res => {
+      if (res.status === 200) {
+        return res.json();
+      } else {
+        throw new AuthorizationError('Bad Credentials: Invalid email or password');
+      }
+    }
+
+    ).catch(err => {
+      throw new AuthorizationError('Bad Credentials: Invalid email or password');
+    }
+    );
+
+    const userData: User = {
+      email: userDataJson.email,
+      token: userDataJson.token,
+    };
+
+
+    console.log(userData);
+
+
+    return await Promise.resolve({ ...userData });
+  })
 );
 
 export default authenticator

@@ -1,8 +1,10 @@
-import { createCookieSessionStorage } from "@remix-run/node";
+import { createCookieSessionStorage, redirect } from "@remix-run/node";
+
+
 
 export let sessionStorage = createCookieSessionStorage({
   cookie: {
-    name: '_session',
+    name: 'suiibell_session',
     sameSite: 'lax',
     path: '/',
     httpOnly: true,
@@ -18,3 +20,15 @@ export type User = {
   token: string;
 };
 
+export async function createUserSession(
+  email: string,
+  redirectTo: string
+) {
+  const session = await sessionStorage.getSession();
+  session.set("email", email);
+  return redirect(redirectTo, {
+    headers: {
+      "Set-Cookie": await sessionStorage.commitSession(session),
+    },
+  });
+}

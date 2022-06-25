@@ -49,14 +49,13 @@ authenticator.use(
         throw new AuthorizationError('Bad Credentials: Invalid email or password');
       }
     }
-
     ).catch(err => {
       throw new AuthorizationError('Bad Credentials: Invalid email or password');
     });
 
     const userData: User = {
       email: userDataJson.email,
-      token: userDataJson.token,
+      jwtoken: userDataJson.jwtoken,
     };
 
 

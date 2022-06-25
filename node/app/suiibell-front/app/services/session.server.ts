@@ -8,6 +8,9 @@ export let sessionStorage = createCookieSessionStorage({
     httpOnly: true,
     secrets: [process.env.SECRET ? process.env.SECRET : "TheDummySecretHogeHoge"],
     secure: process.env.NODE_ENV === 'production',
+    maxAge: 604_800, // 1 week
+    expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 1), // 1 day
+
   },
 });
 
@@ -15,18 +18,20 @@ export let { getSession, commitSession, destroySession } = sessionStorage;
 
 export type User = {
   email: string;
-  token: string;
+  jwtoken: string;
 };
 
 export async function createUserSession(
-  email: string,
+  user: User,
   redirectTo: string
 ) {
   const session = await sessionStorage.getSession();
-  session.set("email", email);
+  session.set("email", user.email);
+  session.set("jwtoken", user.jwtoken);
   return redirect(redirectTo, {
     headers: {
       "Set-Cookie": await sessionStorage.commitSession(session),
     },
+
   });
 }

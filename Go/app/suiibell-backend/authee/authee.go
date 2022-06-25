@@ -5,27 +5,40 @@ import (
 	"github.com/labstack/echo"
 	"github.com/pkg/errors"
 	"io/ioutil"
+	"log"
+	"net/http"
 	"suiibell/anatomy/authAnatomy"
 	"suiibell/ent"
 	"time"
 )
 
 func LoginManager(e echo.Context) error {
+	var incomeUserInfo authAnatomy.UserCredential
 	var user ent.User
 
-	errBind := e.Bind(&user)
+	errBind := e.Bind(&incomeUserInfo)
 	if errBind != nil {
 		return errors.New("failed to bind the user")
 	}
 
-	by, errRead := ioutil.ReadFile("./id_rsa")
+	user.Email = incomeUserInfo.Email
+	user.Password = []byte(incomeUserInfo.Password)
+
+	by, errRead := ioutil.ReadFile("./pkcs8.key")
 	if errRead != nil {
-		return errors.New("failed to read the rsa file.")
+		log.Println(errors.New("failed to read the rsa file."))
+		return e.JSON(500, map[string]string{
+			"error": "internal server error",
+		})
 	}
 
 	authedId, errAuth := LoginCheck(user)
 	if errAuth != nil {
-		return errAuth
+		log.Println(errors.New("failed to authenticate the user"))
+		log.Printf("Incoming IP : %s", e.RealIP())
+		return e.JSON(http.StatusBadRequest, map[string]string{
+			"error": "failed to login the user",
+		})
 	}
 
 	claims := jwt.MapClaims{
@@ -59,9 +72,8 @@ func RegisterManager(e echo.Context) error {
 	user.Password = []byte(incomeUserInfo.Password)
 
 	registeredUser, errRegister := Register(user)
-
 	if errRegister != nil {
-		return errors.New("failed to register the user")
+		return errRegister
 	}
 
 	by, errRead := ioutil.ReadFile("./pkcs8.key")

@@ -16,7 +16,7 @@ func EncryptPass(password string) ([]byte, error) {
 }
 
 func CompareHashedPassAndInput(hashedPass, inputPass []byte) (bool, error) {
-	err := bcrypt.CompareHashAndPassword(hashedPass, []byte(inputPass))
+	err := bcrypt.CompareHashAndPassword(hashedPass, inputPass)
 	if err != nil {
 		return false, errors.New("failed to compare the hashed password and input password")
 	}

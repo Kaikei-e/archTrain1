@@ -3,7 +3,6 @@ package authee
 import (
 	"context"
 	"errors"
-	"fmt"
 	"log"
 	"suiibell/dbconn"
 	"suiibell/ent"
@@ -11,7 +10,6 @@ import (
 )
 
 func LoginCheck(checkUser ent.User) (string, error) {
-	//var hashedPass authAnatomy.HashedPass
 
 	log.Println("checkUser : ", checkUser)
 
@@ -27,14 +25,6 @@ func LoginCheck(checkUser ent.User) (string, error) {
 	if errQuery != nil {
 		return "", errors.New("failed to query the user")
 	}
-	//
-	//hashedPassJson := theUser.Password
-	//errUnmarshal := json.Unmarshal([]byte(hashedPassJson), &hashedPass)
-	//if errUnmarshal != nil {
-	//	return "", errors.New("failed to unmarshal the hashed password")
-	//}
-
-	fmt.Println("hashedPass : ", theUser.Password)
 
 	isSuccess, errCompare := CompareHashedPassAndInput([]byte(theUser.Password), []byte(checkUser.Password))
 	if errCompare != nil {

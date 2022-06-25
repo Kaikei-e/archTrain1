@@ -24,14 +24,6 @@ func LoginManager(e echo.Context) error {
 	user.Email = incomeUserInfo.Email
 	user.Password = incomeUserInfo.Password
 
-	by, errRead := ioutil.ReadFile("./pkcs8.key")
-	if errRead != nil {
-		log.Println(errors.New("failed to read the rsa file."))
-		return e.JSON(500, map[string]string{
-			"error": "internal server error",
-		})
-	}
-
 	authedId, errAuth := LoginCheck(user)
 	if errAuth != nil {
 		log.Println(errAuth)
@@ -41,6 +33,19 @@ func LoginManager(e echo.Context) error {
 		})
 	}
 
+	by, errRead := ioutil.ReadFile("./pkcs8.key")
+	if errRead != nil {
+		log.Println(errors.New("failed to read the rsa file."))
+		return e.JSON(500, map[string]string{
+			"error": "internal server error",
+		})
+	}
+
+	signedKey, errKey := jwt.ParseRSAPrivateKeyFromPEM(by)
+	if errKey != nil {
+		return errors.New("failed to parse the rsa private key")
+	}
+
 	claims := jwt.MapClaims{
 		"email": authedId,
 		"exp":   time.Now().Add(time.Minute * 30).Unix(),
@@ -48,8 +53,8 @@ func LoginManager(e echo.Context) error {
 
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
 
-	signedString, err := token.SignedString(by)
-	if err != nil {
+	signedString, errSign := token.SignedString(signedKey)
+	if errSign != nil {
 		return errors.New("failed to sign the token")
 	}
 

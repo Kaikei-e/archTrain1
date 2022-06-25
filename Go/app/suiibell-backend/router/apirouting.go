@@ -21,9 +21,7 @@ func AuthRouting(e *echo.Echo) error {
 		err := authee.RegisterManager(context)
 		if err != nil {
 			log.Println("failed to register the user : ", err)
-			context.JSON(500, map[string]string{
-				"error": "failed to register the user",
-			})
+			return err
 		}
 		return nil
 	})

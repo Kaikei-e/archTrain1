@@ -1,7 +1,5 @@
 import { createCookieSessionStorage, redirect } from "@remix-run/node";
 
-
-
 export let sessionStorage = createCookieSessionStorage({
   cookie: {
     name: 'suiibell_session',

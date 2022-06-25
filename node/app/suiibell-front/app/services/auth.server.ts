@@ -3,11 +3,13 @@ import { FormStrategy } from 'remix-auth-form';
 import configuration from '~/conf/conf';
 import { sessionStorage, User } from '~/services/session.server';
 
+// authenticator is a singleton, so we can use it in multiple places
 const authenticator = new Authenticator<User | Error | null>(sessionStorage, {
   sessionKey: "sessionKey", // keep in sync
   sessionErrorKey: "sessionErrorKey", // keep in sync
 });
 
+// "use" is the keyword for a function that is used to register a user data
 authenticator.use(
   new FormStrategy(async ({ form }) => {
 
@@ -28,6 +30,9 @@ authenticator.use(
     const hostPort = configuration['go-port']
     const hostPath = configuration['go-path']
 
+    // call API to get user data
+    // Go is a backend server that runs on port 8000 and handles requests
+    // to the /api/v1 path.
     const userDataJson = await fetch(`${hostIP}:${hostPort}${hostPath}/login`, {
       method: 'POST',
       headers: {
@@ -47,8 +52,7 @@ authenticator.use(
 
     ).catch(err => {
       throw new AuthorizationError('Bad Credentials: Invalid email or password');
-    }
-    );
+    });
 
     const userData: User = {
       email: userDataJson.email,
@@ -57,7 +61,6 @@ authenticator.use(
 
 
     console.log(userData);
-
 
     return await Promise.resolve({ ...userData });
   })

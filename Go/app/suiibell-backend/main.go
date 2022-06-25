@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"net/http"
 	"suiibell/initRun"
 	"suiibell/router"
 
@@ -20,26 +19,9 @@ func main() {
 	e.Use(middleware.Recover())
 
 	// Routes
-	e.GET("/", hello)
-
 	errAuth := router.AuthRouting(e)
-	log.Printf("failed to register the auth routing: %v", errAuth)
-
-	//api := e.Group("/api")
-	//api.Use(func(api echo.HandlerFunc) echo.HandlerFunc {
-	//	return func(c echo.Context) error {
-	//		err := router.LoginRouting(e)
-	//		if err != nil {
-	//			return err
-	//		}
-	//		return nil
-	//	}
-	//})
+	log.Fatalf("failed to register the api routing : %s", errAuth)
 
 	// Start server
 	e.Logger.Fatal(e.Start(":8000"))
-}
-
-func hello(c echo.Context) error {
-	return c.String(http.StatusOK, "Hello, World!")
 }

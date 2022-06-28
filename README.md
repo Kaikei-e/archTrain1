@@ -3,7 +3,7 @@ This is a simple repository for PoC of software architecture design exercises.
 
 Considering my skills and knowledge, I am going to use the following technologies:
 ### Language: 
-- [Go](https://golang.org/lang/)
+- [Go](https://go.dev/)
 - [TypeScript](https://www.typescriptlang.org/)
 
 ### Liblaries and frameworks:

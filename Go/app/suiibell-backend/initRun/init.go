@@ -5,12 +5,14 @@ import (
 	"suiibell/dbmanage"
 )
 
-func Init() {
+func Init() error {
 	err := godotenv.Load(".env")
 	if err != nil {
 		panic("failed to load the .env file")
 	}
 
 	dbmanage.EntInit()
+
+	return nil
 
 }

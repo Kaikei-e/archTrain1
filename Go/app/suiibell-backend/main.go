@@ -9,7 +9,10 @@ import (
 )
 
 func main() {
-	initRun.Init()
+	err := initRun.Init()
+	if err != nil {
+		panic(err)
+	}
 
 	e := echo.New()
 

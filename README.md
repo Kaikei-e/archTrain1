@@ -9,12 +9,13 @@ Considering my skills and knowledge, I am going to use the following technologie
 ### Liblaries and frameworks:
 
 - Frontend:
-  - [node.js](https://nodejs.org/) as a server-side framework
+
   - [jwt](https://jwt.io/) as a token that  transports non-critical data between services
   - [Remix](https://remix.run/) as a frotend React-based framework
   - [Chakra UI](https://chakra-ui.com/) as a frontend UI framework
 
 - Backend:  
+  - [node.js](https://nodejs.org/) as a server-side framework
   - [echo](https://echo.labstack.com/) as a web application framework
   - [ent](https://entgo.io/) as a ORM
 
@@ -23,6 +24,7 @@ Considering my skills and knowledge, I am going to use the following technologie
     - I never used it, but I think it is a good choice for a database
 
 ### Infrastructure:
+
 - [Nginx](https://nginx.org/) as a reverse proxy
 - [Docker](https://www.docker.com/) as a containerization engine
 

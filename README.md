@@ -35,7 +35,6 @@ Considering my skills and knowledge, I am going to use the following technologie
 ### Infrastructure:
 
 - [Nginx](https://nginx.org/) as a reverse proxy
-  - 
 - [Docker](https://www.docker.com/) as a containerization engine
 
 

@@ -13,6 +13,7 @@ import (
 )
 
 // LoginManager is the function to authenticate the user
+// This function handles the login request and return the jwt token
 func LoginManager(e echo.Context) error {
 	var incomeUserInfo authAnatomy.UserCredential
 	var user ent.User

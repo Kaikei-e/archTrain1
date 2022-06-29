@@ -35,3 +35,18 @@ export async function createUserSession(
 
   });
 }
+
+
+function getUserSession(request: Request) {
+  return sessionStorage.getSession(request.headers.get("Cookie"));
+}
+
+
+export async function logout(request: Request) {
+  const session = await getUserSession(request);
+  return redirect("/login", {
+    headers: {
+      "Set-Cookie": await sessionStorage.destroySession(session),
+    },
+  });
+}

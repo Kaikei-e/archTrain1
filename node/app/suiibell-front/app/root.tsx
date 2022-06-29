@@ -26,7 +26,7 @@ export default function App() {
 
 export const meta: MetaFunction = () => ({
   charset: 'utf-8',
-  title: 'New Remix App',
+  title: 'SuiiBell',
   viewport: 'width=device-width,initial-scale=1',
 });
 

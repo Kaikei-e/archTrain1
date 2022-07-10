@@ -54,16 +54,16 @@ func LoginManager(e echo.Context) error {
 		"exp":   time.Now().Add(time.Minute * 30).Unix(),
 	}
 
-	jwtoken := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
+	jwtToken := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
 
-	signedString, errSign := jwtoken.SignedString(signedKey)
+	signedString, errSign := jwtToken.SignedString(signedKey)
 	if errSign != nil {
-		return errors.New("failed to sign the jwtoken")
+		return errors.New("failed to sign the jwtToken")
 	}
 
 	return e.JSON(200, map[string]string{
-		"email":   authedId,
-		"jwtoken": signedString,
+		"email":    authedId,
+		"jwtToken": signedString,
 	})
 
 }

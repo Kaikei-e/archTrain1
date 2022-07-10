@@ -17,7 +17,7 @@ Considering my skills and knowledge, I am going to use the following technologie
 - Frontend:
 
   - [jwt](https://jwt.io/) as a token that  transports non-critical data between services
-  - [Remix](https://remix.run/) as a frotend React-based framework
+  - [Remix](https://remix.run/) as a React-based framework
   - [Chakra UI](https://chakra-ui.com/) as a frontend UI framework
 
 - Backend:  

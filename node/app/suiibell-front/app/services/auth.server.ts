@@ -43,14 +43,27 @@ authenticator.use(
         password: password,
       }),
     }).then(res => {
+
       if (res.status === 200) {
         return res.json();
-      } else {
-        throw new AuthorizationError('Bad Credentials: Invalid email or password');
       }
+
+      if (!res.ok) {
+        throw new Error(res.statusText)
+      } else {
+        if (res.status === 500) {
+          throw new AuthorizationError('Internal Server Error')
+        }
+
+
+        //throw new AuthorizationError('Bad Credentials: Invalid email or password');
+      }
+
     }
     ).catch(err => {
-      throw new AuthorizationError('Bad Credentials: Invalid email or password');
+      console.log(err)
+
+      throw new Error(err.message);
     });
 
     const userData: User = {

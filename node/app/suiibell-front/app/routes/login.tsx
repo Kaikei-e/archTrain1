@@ -2,7 +2,7 @@ import { Form, useLoaderData } from "@remix-run/react";
 import { Box, Button, Flex, Input, Spacer, Text } from "@chakra-ui/react";
 import { json, LoaderFunction, ActionFunction } from "@remix-run/node";
 import authenticator from "~/services/auth.server";
-import { sessionStorage, createUserSession } from "~/services/session.server";
+import { sessionStorage } from "~/services/session.server";
 
 export const loader: LoaderFunction = async ({ request }) => {
 
@@ -19,15 +19,15 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export const action: ActionFunction = async ({ request, context }) => {
-  const resp = await authenticator.authenticate("form", request, {
+  const response = await authenticator.authenticate("form", request, {
     successRedirect: "/",
     failureRedirect: "/login",
     throwOnError: true,
     context,
   });
 
-  console.log(resp);
-  return resp;
+  console.log(response);
+  return response;
 };
 
 export default function LoginPage() {

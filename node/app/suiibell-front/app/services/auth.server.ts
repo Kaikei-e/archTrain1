@@ -63,7 +63,7 @@ authenticator.use(
     ).catch(err => {
       console.log(err)
 
-      throw new Error(err.message);
+      throw new Error("Authentication Error");
     });
 
     const userData: User = {

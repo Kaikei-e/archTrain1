@@ -4,17 +4,12 @@ import (
 	"github.com/joho/godotenv"
 	"log"
 	"os"
-	"path/filepath"
 	"suiibell/ent"
 )
 
 func DBConnection() (*ent.Client, error) {
-	p, err := filepath.Abs("../suiibell-backend")
-	if err != nil {
-		log.Panicln(err)
-	}
 
-	errDir := godotenv.Load(filepath.Join(p, ".env"))
+	errDir := godotenv.Load()
 	if errDir != nil {
 		log.Panicln("error loading .env file")
 	}

@@ -6,15 +6,25 @@ import (
 	_ "github.com/lib/pq"
 	"log"
 	"os"
+	"path/filepath"
 	"suiibell/ent"
 	"suiibell/ent/migrate"
 )
 
 func EntInit() {
-
-	err := godotenv.Load(".env")
+	p, err := filepath.Abs("../suiibell-backend")
 	if err != nil {
-		panic("error loading .env file")
+		log.Panicln(err)
+	}
+
+	errDir := godotenv.Load(filepath.Join(p, ".env"))
+	if errDir != nil {
+		log.Panicln(errDir)
+	}
+
+	errLoad := godotenv.Load(".env")
+	if errLoad != nil {
+		log.Panicln("error loading .env file")
 	}
 
 	dbHost := os.Getenv("DB_HOST")
@@ -30,6 +40,7 @@ func EntInit() {
 		log.Fatalf("failed connecting to postgres: %v", err)
 	}
 	defer client.Close()
+
 	ctx := context.Background()
 	// マイグレーションの実行
 	err = client.Schema.Create(
